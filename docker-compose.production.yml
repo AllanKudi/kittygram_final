@@ -1,0 +1,34 @@
+version: '3'
+
+volumes:
+  pg_data_production:
+  static_production:
+  media_production:
+
+services:
+  db:
+    image: postgres:13
+    env_file: .env
+    volumes:
+      - pg_data_production:/var/lib/postgresql/data
+  backend:
+    image: allankudi/kittygram_backend:latest
+    env_file: .env
+    volumes:
+      - static_production:/backend_static
+      - media_production:/media
+    depends_on:
+      - db
+  frontend:
+    env_file: .env
+    image: allankudi/kittygram_frontend:latest
+    command: cp -r /app/build/. /frontend_static/
+    volumes:
+      - static_production:/frontend_static
+  gateway:
+    image: allankudi/kittygram_gateway:latest
+    ports:
+      - 9000:80
+    volumes:
+      - static_production:/static
+      - media_production:/media
