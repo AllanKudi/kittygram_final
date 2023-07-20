@@ -74,7 +74,7 @@ sudo nginx -t
 sudo systemctl start nginx
 ```
 - И вжух - все работает! Без магии!
-## Технологии, которые были применены в проекте:
+# Технологии, которые были применены в проекте:
 
 Python 3.9
 Django REST
@@ -84,6 +84,6 @@ Nginx
 Docker
 PostgreSQL
 
-## Автор проекта:
+# Автор проекта:
 
 Alexandra Kudinova
