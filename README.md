@@ -1,26 +1,89 @@
-#  Как работать с репозиторием финального задания
+#  FULLSTACK-проект KITTYGRAM
 
-## Что нужно сделать
+## Что за проект?
 
-Настроить запуск проекта Kittygram в контейнерах и CI/CD с помощью GitHub Actions
+Это как instagram, но только для котиков! Здесь вы можете поделиться фотографией своего пушистого друга и посмотреть на любимцев других пользователей!
 
-## Как проверить работу с помощью автотестов
+## Что здесь можно делать?
 
-В корне репозитория создайте файл tests.yml со следующим содержимым:
-```yaml
-repo_owner: ваш_логин_на_гитхабе
-kittygram_domain: полная ссылка (https://доменное_имя) на ваш проект Kittygram
-taski_domain: полная ссылка (https://доменное_имя) на ваш проект Taski
-dockerhub_username: ваш_логин_на_докерхабе
+- Создавать профиль, чтобы начать делиться котиками!
+- Добавлять пушистых друзей.
+- Удалять пушистых друзей.
+- Загружать фотографии своих котиков.
+- Указывать возраст\цвет\достижения своих питомцев!
+- Остальное пока еще в разработке!
+
+## Как пользоваться?
+
+- Всё очень просто! А вот и детальная инструкция по запуску проекта:
+
+# Скачиваем все необходимое для работы докера. Команды для терминала linux ubuntu:
 ```
+sudo apt update
+sudo apt install curl
+curl -fSL https://get.docker.com -o get-docker.sh
+sudo sh ./get-docker.sh
+sudo apt-get install docker-compose-plugin
+```
+# Скачиваем проект и заходим в него:
+```
+cd kittygram_final/
+```
+# Создаем и заполняем файл .env по одноименному экземпляру .env.example.
 
-Скопируйте содержимое файла `.github/workflows/main.yml` в файл `kittygram_workflow.yml` в корневой директории проекта.
+# Запускаем наши контейнеры:
+```
+sudo docker compose -f docker-compose.production.yml pull
+sudo docker compose -f docker-compose.production.yml down
+sudo docker compose -f docker-compose.production.yml up -d
+sudo docker compose -f docker-compose.production.yml exec backend python manage.py migrate
+sudo docker compose -f docker-compose.production.yml exec backend python manage.py collectstatic
+sudo docker compose -f docker-compose.production.yml exec backend cp -r /app/collect_static/. /static_backend/static/
+```
+# Создаем суперпользователя для админки:
+```
+sudo docker compose -f docker-compose.production.yml exec backend python manage.py createsuperuser
+```
+- Для работы с собственным сайтом неободимо настроить NGINX!
 
-Для локального запуска тестов создайте виртуальное окружение, установите в него зависимости из backend/requirements.txt и запустите в корневой директории проекта `pytest`.
+# Как его установить? Смотрим!
+```
+sudo apt install nginx -y
+sudo systemctl start nginx
+sudo ufw allow 'Nginx Full'
+sudo ufw allow OpenSSH
+sudo ufw enable
+sudo nano /etc/nginx/sites-enabled/default
+```
+# Вносим в конфигурационный файл следующую информацию:
+```
+server {
+    listen 80;
+    server_name example.com (ваш домен!);
+    
+    location / {
+        proxy_set_header HOST $host;
+        proxy_pass http://127.0.0.1:9000; (можно заменить порт на другой!)
 
-## Чек-лист для проверки перед отправкой задания
+    }
+}
+```
+# Проверяем на очепятки и презагружаем NGINX:
+```
+sudo nginx -t
+sudo systemctl start nginx
+```
+- И вжух - все работает! Без магии!
+## Технологии, которые были применены в проекте:
 
-- Проект Taski доступен по доменному имени, указанному в `tests.yml`.
-- Проект Kittygram доступен по доменному имени, указанному в `tests.yml`.
-- Пуш в ветку main запускает тестирование и деплой Kittygram, а после успешного деплоя вам приходит сообщение в телеграм.
-- В корне проекта есть файл `kittygram_workflow.yml`.
+Python 3.9
+Django REST
+JS
+Node.js
+Nginx
+Docker
+PostgreSQL
+
+## Автор проекта:
+
+Alexandra Kudinova
