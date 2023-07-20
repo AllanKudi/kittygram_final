@@ -10,7 +10,7 @@ BASE_DIR = Path(__file__).resolve().parent.parent
 
 SECRET_KEY = os.getenv('SECRET_KEY', True)
 
-DEBUG = os.getenv('DEBUG', True).lower() == True
+DEBUG = os.getenv('DEBUG', True) == True
 
 ALLOWED_HOSTS = ['84.201.138.218', '127.0.0.1', 'localhost', 'kittgram.ddns.net']
 
