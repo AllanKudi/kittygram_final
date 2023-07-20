@@ -1,12 +1,6 @@
 FROM python:3.9
 
-RUN pip install virtualenv
-
 WORKDIR /app
-
-RUN virtualenv venv
-
-ENV VIRTUAL_ENV_PATH="/app/venv/bin:$PATH"
 
 COPY requirements.txt .
 
